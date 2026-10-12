@@ -3,15 +3,38 @@ services:
     name: attendease-api
     runtime: docker
     plan: free
+    region: oregon
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     healthCheckPath: /api/health
     envVars:
-      - key: DB_URL
-        sync: false
+      - key: DB_ENGINE
+        value: postgresql
+      - key: DB_HOST
+        fromDatabase:
+          name: attendease-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: attendease-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: attendease-db
+          property: database
       - key: DB_USERNAME
-        sync: false
+        fromDatabase:
+          name: attendease-db
+          property: user
       - key: DB_PASSWORD
-        sync: false
+        fromDatabase:
+          name: attendease-db
+          property: password
       - key: CORS_ALLOWED_ORIGINS
-        sync: false
+        value: http://localhost:5173,http://localhost:3000
+databases:
+  - name: attendease-db
+    databaseName: attendease
+    user: attendease
+    plan: free
+    region: oregon

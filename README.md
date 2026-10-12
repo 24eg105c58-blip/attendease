@@ -57,16 +57,12 @@ The sample app initializes demo users and subjects on startup. Use the included 
 
 ## Deployment
 
-The app can be deployed as a Render Docker web service for the API and a Vercel static site for the frontend. You need an externally hosted MySQL database; Render's Blueprint does not create one.
+The app can be deployed as a Render Docker web service and managed PostgreSQL database, plus a Vercel static site for the frontend. The local setup continues to use MySQL by default.
 
 ### 1. Deploy the backend on Render
-1. Create a MySQL database with a provider that allows external connections. Keep its hostname, port, database name, username, and password.
-2. In the [Render Dashboard](https://dashboard.render.com), choose **New + → Blueprint**, connect this GitHub repository, and select `render.yaml`.
-3. When prompted for the unsynced variables, enter:
-   - `DB_URL`: `jdbc:mysql://<host>:<port>/<database>?useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=UTC`
-   - `DB_USERNAME` and `DB_PASSWORD`: credentials from your database provider.
-   - `CORS_ALLOWED_ORIGINS`: `http://localhost:5173` for the first deployment; replace it with your Vercel production URL after deploying the frontend.
-4. Deploy the Blueprint. Wait for the service health check to pass, then copy its URL, such as `https://attendease-api.onrender.com`.
+1. In the [Render Dashboard](https://dashboard.render.com), choose **New + → Blueprint**, connect this GitHub repository, and select `render.yaml`.
+2. Deploy the Blueprint to create the API service and PostgreSQL database. The Blueprint wires the database connection automatically.
+3. Wait for the service health check to pass, then copy its URL, such as `https://attendease-api.onrender.com`.
 
 ### 2. Deploy the frontend on Vercel
 1. In the [Vercel Dashboard](https://vercel.com/dashboard), import this GitHub repository.

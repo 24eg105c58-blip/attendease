@@ -67,8 +67,8 @@ The app can be deployed as a Render Docker web service and managed PostgreSQL da
 ### 2. Deploy the frontend on Vercel
 1. In the [Vercel Dashboard](https://vercel.com/dashboard), import this GitHub repository.
 2. Set **Root Directory** to `frontend` and keep the detected Vite build settings (`npm run build`, output directory `dist`).
-3. Add the environment variable `VITE_API_URL` with the backend URL and `/api`, for example `https://attendease-api.onrender.com/api`. Add it for Production (and Preview if needed), then deploy.
-4. Copy the deployed Vercel production URL. In Render, set `CORS_ALLOWED_ORIGINS` to that exact URL (no trailing slash), then save and redeploy the API.
+3. The production frontend defaults to the AttendEase Render API. If you use a different backend URL, add `VITE_API_URL` with the backend URL and `/api` (for example `https://your-api-domain.onrender.com/api`) for Production (and Preview if needed), then deploy.
+4. `CORS_ALLOWED_ORIGINS` in `render.yaml` includes the Vercel main-branch domain and local development origins. If you add a custom Vercel domain, add that exact origin (no trailing slash) to this variable.
 
 The Render service uses the health endpoint `/api/health`. Both platforms can deploy future changes from the connected GitHub repository. Keep database credentials in Render environment variables; never commit them.
 

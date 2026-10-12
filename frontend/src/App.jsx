@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Activity, BookOpen, CalendarCheck, ChevronDown, CircleAlert, GraduationCap, LayoutDashboard, LogOut, Search, ShieldCheck, Users } from 'lucide-react';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://attendease-api-lsd6.onrender.com/api' : 'http://localhost:8080/api');
 const demo = { ADMIN:{email:'admin@attendease.com',password:'admin123'}, FACULTY:{email:'faculty@attendease.com',password:'faculty123'}, STUDENT:{email:'student@attendease.com',password:'student123'} };
 
 export default function App() {

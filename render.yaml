@@ -31,7 +31,7 @@ services:
           name: attendease-db
           property: password
       - key: CORS_ALLOWED_ORIGINS
-        value: http://localhost:5173,http://localhost:3000
+        value: https://attendease-git-main-raju-b675.vercel.app,http://localhost:5173,http://localhost:3000
 databases:
   - name: attendease-db
     databaseName: attendease

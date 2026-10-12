@@ -12,7 +12,6 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins={"http://localhost:5173","http://localhost:3000"})
 public class ApiController {
     private final UserRepository users;
     private final SubjectRepository subjects;

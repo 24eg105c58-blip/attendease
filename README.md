@@ -57,14 +57,24 @@ The sample app initializes demo users and subjects on startup. Use the included 
 
 ## Deployment
 
-### Backend + MySQL
-1. Set environment variables `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD`.
-2. Deploy the backend to a Java hosting service or a VPS with Java 17 and Docker support.
-3. Provision a managed MySQL database or run `docker compose up -d mysql backend`.
-4. Set the frontend `VITE_API_URL` to the deployed backend API base URL (for example, `https://your-api-domain.com/api`) before building.
+The app can be deployed as a Render Docker web service for the API and a Vercel static site for the frontend. You need an externally hosted MySQL database; Render's Blueprint does not create one.
 
-### Frontend
-Run `npm run build` inside `frontend`; deploy the generated `dist/` folder to a static host (e.g. Netlify, Vercel, or Nginx). Configure `VITE_API_URL` to your backend URL.
+### 1. Deploy the backend on Render
+1. Create a MySQL database with a provider that allows external connections. Keep its hostname, port, database name, username, and password.
+2. In the [Render Dashboard](https://dashboard.render.com), choose **New + → Blueprint**, connect this GitHub repository, and select `render.yaml`.
+3. When prompted for the unsynced variables, enter:
+   - `DB_URL`: `jdbc:mysql://<host>:<port>/<database>?useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=UTC`
+   - `DB_USERNAME` and `DB_PASSWORD`: credentials from your database provider.
+   - `CORS_ALLOWED_ORIGINS`: `http://localhost:5173` for the first deployment; replace it with your Vercel production URL after deploying the frontend.
+4. Deploy the Blueprint. Wait for the service health check to pass, then copy its URL, such as `https://attendease-api.onrender.com`.
+
+### 2. Deploy the frontend on Vercel
+1. In the [Vercel Dashboard](https://vercel.com/dashboard), import this GitHub repository.
+2. Set **Root Directory** to `frontend` and keep the detected Vite build settings (`npm run build`, output directory `dist`).
+3. Add the environment variable `VITE_API_URL` with the backend URL and `/api`, for example `https://attendease-api.onrender.com/api`. Add it for Production (and Preview if needed), then deploy.
+4. Copy the deployed Vercel production URL. In Render, set `CORS_ALLOWED_ORIGINS` to that exact URL (no trailing slash), then save and redeploy the API.
+
+The Render service uses the health endpoint `/api/health`. Both platforms can deploy future changes from the connected GitHub repository. Keep database credentials in Render environment variables; never commit them.
 
 ### Important before real deployment
 - Replace demo authentication with Spring Security + JWT and BCrypt password hashing.

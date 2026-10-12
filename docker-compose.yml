@@ -1,0 +1,30 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: attendease
+      MYSQL_USER: attend_user
+      MYSQL_PASSWORD: ${DB_PASSWORD:-change_me_local}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-change_root_local}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-change_root_local}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  backend:
+    build: ./backend
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/attendease?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      DB_USERNAME: attend_user
+      DB_PASSWORD: ${DB_PASSWORD:-change_me_local}
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+volumes:
+  mysql_data:

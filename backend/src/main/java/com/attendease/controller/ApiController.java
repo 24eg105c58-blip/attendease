@@ -12,6 +12,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins="${CORS_ALLOWED_ORIGINS:http://localhost:5173}")
 public class ApiController {
     private final UserRepository users;
     private final SubjectRepository subjects;
